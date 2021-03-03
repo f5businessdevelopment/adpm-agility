@@ -250,12 +250,12 @@ jobs:
         run: |
           echo $DIRECTION
           echo ::set-output name=can_scale::'false'
-            if [[ $DIRECTION == 'down' ]]  && [[ ${{ steps.delta.outputs.wanted_scale_down_count }} -ge ${{ steps.values.outputs.min_count }} ]]; then
+            if [[ "$DIRECTION" == 'down' ]]  && [[ ${{ steps.delta.outputs.wanted_scale_down_count }} -ge ${{ steps.values.outputs.min_count }} ]]; then
               echo "::set-env name=direction::down"
               echo "DIRECTION IS DOWN"
               echo "::set-output name=new_count::${{ steps.delta.outputs.wanted_scale_down_count }}"
               echo ::set-output name=can_scale::'true'
-            elif [[ $DIRECTION == 'up' ]]  && [[ ${{ steps.delta.outputs.wanted_scale_up_count }} -le ${{ steps.values.outputs.max_count }} ]]; then
+            elif [[ "$DIRECTION" == 'up' ]]  && [[ ${{ steps.delta.outputs.wanted_scale_up_count }} -le ${{ steps.values.outputs.max_count }} ]]; then
                echo "::set-env name=direction::up"
                echo "::set-output name=direction::up"
                echo "DIRECTION IS UP"
@@ -470,20 +470,6 @@ jobs:
           echo ::set-env name=CONSUL_HTTP_TOKEN::${{ secrets.CONSUL_HTTP_TOKEN }}
           sudo sh scripts/consul.sh
 
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: |
-          echo "THIS IS THE STEPS CONTEXT $STEPS_CONTEXT"
-          echo "$STEPS_CONTEXT" | consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server}} workflows/scaling_events/$GITHUB_RUN_NUMBER/jobs/reset_is_running -
-
-      
-      - name: Dump job context
-        id: context
-        env:
-          JOB_CONTEXT: ${{ toJSON(job) }}
-        run: echo "$JOB_CONTEXT" 
-
       - name: reset run flag
         run: |
           if [[ ${{ needs.setup.outputs.we_set_running == 'true' }} ]]; then
@@ -494,5 +480,21 @@ jobs:
               echo "RESET RUNNING FLAG"
             fi
           fi
+      
+      - name: Dump steps context
+        id: steps
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: |
+          echo "THIS IS THE STEPS CONTEXT $STEPS_CONTEXT"
+          echo "$STEPS_CONTEXT" | consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server}} workflows/scaling_events/$GITHUB_RUN_NUMBER/jobs/reset_is_running - 
+
+      - name: Dump job context
+        id: context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "This is the job context $JOB_CONTEXT" 
+      
+
       
 
