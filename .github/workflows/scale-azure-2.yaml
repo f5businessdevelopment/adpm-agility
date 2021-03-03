@@ -275,7 +275,7 @@ jobs:
         id: cant_scale
         if: steps.test.outputs.can_scale != 'true'
         env: 
-          UP_MESSAGE: "Can't scale down to the desired capacity of ${{ steps.delta.outputs.wanted_scale_down_count }} because it is lower than the minimum number of instances of ${{ steps.values.outputs.min_count }}"
+          UP_MESSAGE: "Can't scale up to the desired capacity of ${{ steps.delta.outputs.wanted_scale_up_count }} because it is greater than the maximum number of instances of ${{ steps.values.outputs.max_count }}"
           DOWN_MESSAGE: "Can't scale down to the desired capacity of ${{ steps.delta.outputs.wanted_scale_down_count }} because it is lower than the minimum number of instances of ${{ steps.values.outputs.min_count }}"
         run: |
           if [[ "${{ github.event.client_payload.scaling_direction }}" == "up" ]]; then
@@ -433,9 +433,9 @@ jobs:
       - name: install consul client
         run: sudo sh scripts/consul.sh
 
-      - name: store github data in student consul
-        run: |
-          consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/workflows/
+      # - name: store github data in student consul
+      #   run: |
+      #     consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/workflows/
 
 
       - name: update time & count on k/v store
