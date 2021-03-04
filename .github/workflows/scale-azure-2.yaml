@@ -410,6 +410,11 @@ jobs:
           cd ./workflow_automation/state_setup
           terraform apply --auto-approve -var 'bigip_count=${{ steps.count.outputs.bigip_count }}' -var 'app_count=${{ steps.count.outputs.app_count }}' -var 'student_id=${{ needs.setup.outputs.student_id }}'  
     
+      - name: terraform output after state setup
+        run: |
+          cd ./workflow_automation/state_setup
+          terraform output
+      
       - name: terraform init deploy
         run: |
           cd ./workflow_automation/deploy
@@ -425,6 +430,11 @@ jobs:
         run: |
           cd ./workflow_automation/deploy
           echo ::set-output name=terraform_apply::$(terraform apply --auto-approve)
+      
+      - name: terraform output after deploy
+        run: |
+          cd ./workflow_automation/deploy
+          terraform output
 
       - name: output context
         id: json
