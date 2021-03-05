@@ -18,6 +18,7 @@ cd ../../workflow_automation/deploy/
 terraform init && terraform destroy --auto-approve
 rm -rf .terraform
 rm -rf .terraform.lock.hcl
+rm -rf providers.tf
 
 cd ../state_setup/
 terraform init && terraform destroy --auto-approve

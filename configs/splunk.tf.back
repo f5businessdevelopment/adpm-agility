@@ -61,7 +61,7 @@ resource "azurerm_virtual_machine" "splunkvm" {
     computer_name  = "splunkvm"
     admin_username = "splunk"
     admin_password = var.upassword
-    custom_data    = file("./splunk.sh")
+    custom_data    = file("../../configs/splunk.sh")
 
   }
 
