@@ -8,8 +8,6 @@ resource random_id id {
 providers = {
     consul = consul
   }
-
-  depends_on                 = [null_resource.azure-cli]
 }
 
 
