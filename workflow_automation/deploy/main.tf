@@ -1,17 +1,13 @@
+provider "consul" {
+  address = "3.95.15.85:8500"
+}
+
 #
 # Create a random id
 #
 resource random_id id {
   byte_length = 2
 }
-
-providers = {
-    consul = consul
-  }
-
-  depends_on                 = [null_resource.azure-cli]
-}
-
 
 locals {
   # Ids for multiple sets of EC2 instances, merged together
