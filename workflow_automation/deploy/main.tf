@@ -1,10 +1,6 @@
-terraform {
-  required_providers {
-    consul = {
-      source = "hashicorp/consul"
-      version = "2.11.0"
-    }
-  }
+
+provider "consul" {
+  address = "3.95.15.85:8500"
 }
 
 #
