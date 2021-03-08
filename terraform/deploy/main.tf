@@ -432,6 +432,7 @@ resource "azurerm_log_analytics_solution" "sentinel" {
 #
 #  Create ELK stack
 #
+
 resource "azurerm_public_ip" "elk_public_ip" {
   name                = "pip-mgmt-elk"
   location            = var.location
@@ -462,6 +463,11 @@ resource "azurerm_network_interface" "elkvm-ext-nic" {
     tag_name    = "Env"
     value       = "elk"
   }
+}
+
+data "template_file" "elk_sh" {
+  template = file("../../configs/elk.sh")
+  depends_on = [azurerm_resource_group.rg, azurerm_public_ip.elk_public_ip]
 }
 
 resource "azurerm_virtual_machine" "elkvm" {
@@ -495,7 +501,7 @@ resource "azurerm_virtual_machine" "elkvm" {
     computer_name  = "elkvm"
     admin_username = "elkuser"
     admin_password = var.upassword
-    custom_data    = file("elk.sh")
+    custom_data    = data.template_file.elk_sh.rendered
 
   }
 
