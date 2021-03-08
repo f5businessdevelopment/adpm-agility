@@ -105,16 +105,7 @@ jobs:
       
       - name: check if another running already
         id: get_is_running
-        run: |
-          if [[ "${{ github.event.client_payload.scaling_type }}" == "bigip" ]]; then
-            echo ::set-output name=is_running::$(consul kv get -http-addr=${{ steps.consul_params.outputs.consul_server }} adpm/labs/agility/students/${{ steps.client_payload_data.outputs.student_id }}/scaling/bigip/is_running)
-            echo "BIGIP SCALING"  
-          elif [[ "${{ github.event.client_payload.scaling_type }}" == "app" ]]; then
-            echo ::set-output name=is_running::$(consul kv get -http-addr=${{ steps.consul_params.outputs.consul_server }} adpm/labs/agility/students/${{ steps.client_payload_data.outputs.student_id }}/scaling/apps/${{ github.event.client_payload.app_name }}/is_running)
-            echo "APP SCALING"
-          else
-            echo "SCALING TYPE NOT SET!!!"
-          fi
+        run: echo ::set-output name=is_running::$(consul kv get -http-addr=${{ steps.consul_params.outputs.consul_server }} adpm/labs/agility/students/${{ steps.client_payload_data.outputs.student_id }}/scaling/is_running)
 
       - name: do we run?
         id: check_running
@@ -122,11 +113,8 @@ jobs:
           if [[ "${{ steps.get_is_running.outputs.is_running }}" == "true" ]]; then
             echo "WE ARE ABORTING BECAUSE ANOTHER RUNNING"
             exit 1
-          elif [[ "${{ github.event.client_payload.scaling_type }}" == "app" ]]; then
-            consul kv put -http-addr=${{ steps.consul_params.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/apps/${{ github.event.client_payload.app_name }}/is_running true
-            echo ::set-output name=we_set_running::'true'   
           else
-            consul kv put -http-addr=${{ steps.consul_params.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/bigip/is_running true
+            consul kv put -http-addr=${{ steps.consul_params.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/is_running true
             echo ::set-output name=we_set_running::'true' 
           fi
       
@@ -483,13 +471,8 @@ jobs:
       - name: reset run flag
         run: |
           if [[ ${{ needs.setup.outputs.we_set_running == 'true' }} ]]; then
-            if [[ "${{ github.event.client_payload.scaling_type }}" == "bigip" ]]; then
-             consul kv put -http-addr=${{ needs.setup.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/bigip/is_running false
-             echo ::set-output name=message::"The BIGIP 'is_running' flag has been reset to false"
-            else
-              consul kv put -http-addr=${{ needs.setup.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/apps/${{ github.event.client_payload.app_name }}/is_running false
-              echo ::set-output name=message::"The application 'is_running' flag has been reset to false"
-            fi
+            consul kv put -http-addr=${{ needs.setup.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/is_running false
+            echo ::set-output name=message::"The application 'is_running' flag has been reset to false"
           fi
       
       - name: Dump steps context
