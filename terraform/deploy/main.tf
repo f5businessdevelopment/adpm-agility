@@ -465,11 +465,6 @@ resource "azurerm_network_interface" "elkvm-ext-nic" {
   }
 }
 
-data "template_file" "elk_sh" {
-  template = file("../../configs/elk.sh")
-  depends_on = [azurerm_resource_group.rg, azurerm_public_ip.elk_public_ip]
-}
-
 resource "azurerm_virtual_machine" "elkvm" {
   name                  = "elkvm"
   location              = var.location
@@ -501,7 +496,7 @@ resource "azurerm_virtual_machine" "elkvm" {
     computer_name  = "elkvm"
     admin_username = "elkuser"
     admin_password = var.upassword
-    custom_data    = data.template_file.elk_sh.rendered
+    custom_data    = file("elk.sh")
 
   }
 
