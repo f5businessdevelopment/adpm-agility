@@ -1,3 +1,10 @@
+provider azurerm {
+    features {}
+}
+provider "consul" {
+  address = "3.95.15.85:8500"
+}
+
 #
 # Create a random id
 #
@@ -490,7 +497,7 @@ resource "azurerm_virtual_machine" "elkvm" {
     computer_name  = "elkvm"
     admin_username = "elkuser"
     admin_password = var.upassword
-    custom_data    = file("../../configs/elk.sh")
+    custom_data    = file("elk.sh")
 
   }
 
