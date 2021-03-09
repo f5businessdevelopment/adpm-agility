@@ -36,7 +36,6 @@ resource "azurerm_public_ip" "alb_public_ip" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
-  sku                 = "Standard"
 }
 
 data "template_file" "azure_cli_sh" {
