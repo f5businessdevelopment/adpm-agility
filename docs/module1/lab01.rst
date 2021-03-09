@@ -71,7 +71,7 @@ yourself with your student environment.
 
 #. In addition to the above services, the Terraform deployment output includes the management address and credentials for the 
    single BIG-IP initially deployed.  While not necessary for this particular lab, you may use the suppled credentials and address to 
-   connect to BIG-IP's management interface.  **Note:** The BIG-IP management interface is available via port *8443*.
+   connect to BIG-IP's management interface.  **Note:** The BIG-IP management interface is available via port *8443* (https://<mgmtIP:8443>).
 
 
 
