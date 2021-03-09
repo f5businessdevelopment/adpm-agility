@@ -12,7 +12,7 @@ send alert triggers to the ADPM system when scaling of either the BIG-IP fronten
 -------------------------------------
 
 #. From your VS Code browser page, either copy of double-click on the link entitled **f_elk_public_address**.  You are 
-   presented with the logon page shown below.  Use the relevant credentials provided in the _`startup section<../startup.rst>`_ to log into
+   presented with the logon page shown below.  Use the relevant credentials provided in the _`startup section <https://github.com/f5businessdevelopment/adpm-agility/blob/main/docs/module1/startup.rst>`_ to log into
    Kibana, (the ELK stack visualization service and the '*K*' in ELK).
 
    .. image:: images/elk_login.png
@@ -22,8 +22,8 @@ send alert triggers to the ADPM system when scaling of either the BIG-IP fronten
 
    .. image:: images/elk_explore.png
 
-#. Next, you will need to create an index pattern.  The index pattern will provide a starting base in which to query ingested
-   BIG-IP telemetry.  From the upper-left corner select the menu icon and navigate down the sidebar menu to the '*Analytics*'
+#. Next, you will need to create an index pattern.  The index pattern will provide a starting base to query ingested
+   BIG-IP telemetry. From the upper-left corner select the menu icon and navigate down the sidebar menu to the '*Analytics*'
    section and select '*Discover*', (see below).
 
    .. image:: images/elk_discover.png
@@ -32,7 +32,7 @@ send alert triggers to the ADPM system when scaling of either the BIG-IP fronten
 
    .. image:: images/index_1.png
 
-#. On the *Create Index Pattern* screen enter ``F5-*`` for the index pattern name.  As the example below illustrates, you should
+#. On the *Create Index Pattern* screen enter ``F5-*`` for the index pattern name.  As the example below illustrates, you should see
    several indexes listed below.  As telemetry data is streamed from the BIG-IP(s) to the ELK stack, (via Logstash - the '*L*' in ELK)
    it is assigned an index with a pattern of **f5-%{+YYYY.MM.dd.hh.mm}**.
 
@@ -47,8 +47,8 @@ send alert triggers to the ADPM system when scaling of either the BIG-IP fronten
 ---------------------------------------------
 
 #. Your ELK stack will initially deploy with a free basic license.  However, to make use of alerts and webhook notifications,
-   (either via Kibana or Watcher) you must first upgrade the ELK stack license.  To do this, you will enable a 30-day trial
-   license.  From the upper-left corner select the menu icon and navigate down the sidebar menu to the bottom and select '*Stack Management*'
+   (either via Kibana or Watcher) you must first upgrade the ELK stack license. For this lab, we will enable a 30-day trial
+   license. To do this, from the upper-left corner select the menu icon and navigate down the sidebar menu to the bottom and select '*Stack Management*'
    to open the *Stack Management* side-bar submenu.  
    
    .. image:: images/stack_mgmt.png  
@@ -77,8 +77,8 @@ submenu navigate to and select '*Watcher*', (see above).  From the center panel 
 
 You will be creating a total of four (4) alerts.  These alerts will monitor and respond to increases/decreases in BIG-IP cpu
 utilization and current application connections.  In the event a member BIG-IP's cpu utilization exceeds or falls below the
-specified thresholds during the specified interval, an alert will fire triggering a webhook call to the ADPM *alertForwarder*
-service.  The alertForwarder will subsequently post a BIG-IP scaling request to the central processor, (utilizing the 
+specified thresholds during the specified interval, an alert will fire, triggering a webhook call to the ADPM *alertForwarder*
+service. The alertForwarder will subsequently post a BIG-IP scaling request to the central processor, (utilizing the 
 repo's **GitHub Actions**).
    
 Likewise, if current connections fall outside of the specified thresholds a similar alert will be fired.  However, rather than
