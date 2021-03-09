@@ -504,8 +504,7 @@ What filename should be used for the output zip file? \[/usr/share/elasticsearch
 send -- "\r"
 expect eof
 EOF
-sudo chmod +x ./http && sudo ./http && sudo unzip /usr/share/elasticsearch/elasticsearch-ssl-http.zip 
-sleep 10 && sudo cp /kibana/elasticsearch-ca.pem /etc/kibana && cp /kibana/elasticsearch-ca.pem /etc/logstash && sudo cp /elasticsearch/http.p12 /etc/elasticsearch && sudo cp /usr/share/elasticsearch/elastic-stack-ca.p12 /etc/elasticsearch && sudo cp /usr/share/elasticsearch/elastic-certificates.p12 /etc/elasticsearch && sudo systemctl stop elasticsearch
+sudo chmod +x ./http && sudo ./http && sudo unzip /usr/share/elasticsearch/elasticsearch-ssl-http.zip && sudo cp /home/elkuser/kibana/elasticsearch-ca.pem /etc/kibana && cp /home/elkuser/kibana/elasticsearch-ca.pem /etc/logstash && sudo cp /home/elkuser/elasticsearch/http.p12 /etc/elasticsearch && sudo cp /usr/share/elasticsearch/elastic-stack-ca.p12 /etc/elasticsearch && sudo cp /usr/share/elasticsearch/elastic-certificates.p12 /etc/elasticsearch && sudo systemctl stop elasticsearch
 
 sudo cat << EOF > elasticsearch2.yml
   # ======================== Elasticsearch Configuration =========================
