@@ -6,6 +6,7 @@ az network lb create \
     --sku Standard \
     --public-ip-address ${public_ip} \
     --backend-pool-name f5BackEndPool
+    --public-ip-zone 1,2,3
 
 az network lb probe create \
     --resource-group ${rg_name} \
