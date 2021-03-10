@@ -26,6 +26,9 @@ locals {
 resource azurerm_resource_group rg {
   name     = format("student-%s-%s-rg", local.student_id, random_id.id.hex)
   location = var.location
+  tags = {
+    creation_timestamp = timestamp()
+  }
 }
 
 #
