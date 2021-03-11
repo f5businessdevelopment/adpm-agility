@@ -1,12 +1,4 @@
-output b_bigip_username {
-  value = module.bigip.*.f5_username
-}
-
-output c_bigip_password {
-  value = module.bigip.*.bigip_password
-}
-
-output "a_management_address" {
+output "a_bigip_management_address" {
   value = "https://${module.bigip.0.mgmtPublicIP}:8443"
 }
 
