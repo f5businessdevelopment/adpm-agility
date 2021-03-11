@@ -419,10 +419,6 @@ resource "consul_keys" "app" {
     path  = format("adpm/labs/agility/students/%s/terraform/outputs/elk_public_address", local.student_id )
     value =  "http://${azurerm_public_ip.elk_public_ip.ip_address}"
   }
-  key {
-    path  = format("adpm/labs/agility/students/%s/terraform/outputs/management_public_ip", local.student_id )
-    value =  module.bigip.*.mgmtPublicIP
-  }  
 }
 
 #
