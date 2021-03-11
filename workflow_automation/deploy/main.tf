@@ -403,6 +403,10 @@ resource "consul_keys" "app" {
     value = "http://${azurerm_public_ip.mgmt_public_ip.ip_address}:8500"
   }
   key {
+    path  = format("adpm/labs/agility/students/%s/terraform/outputs/bigip_mgmt", local.student_id)
+    value = "https://${module.bigip.0.mgmtPublicIP}:8443"
+  }
+  key {
     path  = format("adpm/labs/agility/students/%s/terraform/outputs/application_address", local.student_id )
     value = "https://${azurerm_public_ip.alb_public_ip.ip_address}"
   }
