@@ -408,19 +408,19 @@ resource "consul_keys" "app" {
     value = "http://${azurerm_public_ip.mgmt_public_ip.ip_address}:8500"
   }
   key {
-    path  = format("adpm/labs/agility/students/%s/terraform/outputs/application_address, local.student_id )
+    path  = format("adpm/labs/agility/students/%s/terraform/outputs/application_address", local.student_id )
     value = "https://${azurerm_public_ip.alb_public_ip.ip_address}"
   }
   key {
-    path  = format("adpm/labs/agility/students/%s/terraform/outputs/consul_public_address, local.student_id )
+    path  = format("adpm/labs/agility/students/%s/terraform/outputs/consul_public_address", local.student_id )
     value = "http://${azurerm_public_ip.mgmt_public_ip.ip_address}:8500"
   }
   key {
-    path  = format("adpm/labs/agility/students/%s/terraform/outputs/elk_public_address, local.student_id )
+    path  = format("adpm/labs/agility/students/%s/terraform/outputs/elk_public_address", local.student_id )
     value =  "http://${azurerm_public_ip.elk_public_ip.ip_address}"
   }
   key {
-    path  = format("adpm/labs/agility/students/%s/terraform/outputs/management_public_ip, local.student_id )
+    path  = format("adpm/labs/agility/students/%s/terraform/outputs/management_public_ip", local.student_id )
     value =  module.bigip.*.mgmtPublicIP
   }  
 }
