@@ -6,8 +6,8 @@ output c_bigip_password {
   value = module.bigip.*.bigip_password
 }
 
-output "a_management_public_ip" {
-  value = module.bigip.*.mgmtPublicIP
+output "a_management_address" {
+  value = "https://${module.bigip.0.mgmtPublicIP}:8443"
 }
 
 output "d_application_address" {
