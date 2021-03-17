@@ -533,6 +533,13 @@ resource "azurerm_virtual_machine" "elkvm" {
   provisioner "file" {
     source      = "elkupdate.sh"
     destination = "/home/ubuntu/elkupdate.sh"
+
+    connection {
+      type     = "ssh"
+      user     = "elkuser"
+      password = "${var.upassword}"
+      host     = "elkvm"
+    }
   }
 
   provisioner "remote-exec" {
