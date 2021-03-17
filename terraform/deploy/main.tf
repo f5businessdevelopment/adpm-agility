@@ -541,8 +541,8 @@ resource "azurerm_virtual_machine" "elkvm" {
 
     connection {
       type     = "ssh"
-      user     = "root"
-      password = var.upassword
+      user     = "elkuser"
+      password = "F5Student!"
       host     = data.azurerm_public_ip.elk_public_ip.ip_address
     }
   }
