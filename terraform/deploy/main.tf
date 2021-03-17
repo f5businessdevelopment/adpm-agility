@@ -537,20 +537,20 @@ resource "azurerm_virtual_machine" "elkvm" {
 
   provisioner "file" {
     source      = "elkupdate.sh"
-    destination = "/home/ubuntu/elkupdate.sh"
+    destination = "/home/elkuser/elkupdate.sh"
 
     connection {
       type     = "ssh"
       user     = "elkuser"
-      password = "F5Student!"
+      password = var.upassword
       host     = data.azurerm_public_ip.elk_public_ip.ip_address
     }
   }
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /home/ubuntu/elkupdate.sh",
-      "/home/ubuntu/elkupdate.sh",
+      "chmod +x /home/elkuser/elkupdate.sh",
+      "/home/elkuser/elkupdate.sh",
     ]
   }
 }
