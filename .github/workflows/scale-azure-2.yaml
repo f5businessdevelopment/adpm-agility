@@ -2,7 +2,7 @@ name: scale-azure
 on:
   repository_dispatch:
     types:
-      - scale-azure
+      - scale-azure-blah-blah
 jobs:
   setup:
     name: setup
