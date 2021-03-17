@@ -546,17 +546,4 @@ resource "azurerm_virtual_machine" "elkvm" {
       host     = data.azurerm_public_ip.elk_public_ip.ip_address
     }
   }
-
-  provisioner "remote-exec" {
-    inline = [
-      "chmod +x /home/elkuser/elkupdate.sh",
-      "/home/elkuser/elkupdate.sh",
-    ]
-    connection {
-      type     = "ssh"
-      user     = "elkuser"
-      password = var.upassword
-      host     = data.azurerm_public_ip.elk_public_ip.ip_address
-    }
-  }
 }
