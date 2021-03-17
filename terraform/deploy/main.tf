@@ -463,6 +463,11 @@ resource "azurerm_public_ip" "elk_public_ip" {
   }
 }
 
+data  "azurerm_public_ip" "elk_public_ip" {
+  name                = azurerm_public_ip.elk_public_ip.name
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
 resource "azurerm_network_interface" "elkvm-ext-nic" {
   name               = "${local.student_id}-elkvm-ext-nic"
   location           = var.location
@@ -538,7 +543,7 @@ resource "azurerm_virtual_machine" "elkvm" {
       type     = "ssh"
       user     = "elkuser"
       password = "${var.upassword}"
-      host     = ${azurerm_public_ip.elk_public_ip.ip_address}
+      host     = data.azurerm_public_ip.elk_public_ip.ip_address
     }
   }
 
