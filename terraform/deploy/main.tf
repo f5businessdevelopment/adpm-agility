@@ -529,4 +529,16 @@ resource "azurerm_virtual_machine" "elkvm" {
     value               = "elk"
     propagate_at_launch = true
   }
+
+  provisioner "file" {
+    source      = "elkupdate.sh"
+    destination = "/home/ubuntu/elkupdate.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /home/ubuntu/elkupdate.sh",
+      "/home/ubuntu/elkupdate.sh",
+    ]
+  }
 }
