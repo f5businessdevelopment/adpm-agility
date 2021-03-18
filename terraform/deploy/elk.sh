@@ -540,7 +540,7 @@ install_elastic
 install_kibana
 install_logstash
 install_security
-#setup_passwords
-#setup_ca
-#setup_cert
-#setup_http
+setup_passwords
+setup_ca
+setup_cert
+setup_http
