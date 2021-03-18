@@ -520,7 +520,7 @@ resource "azurerm_virtual_machine" "elkvm" {
     computer_name  = "elkvm"
     admin_username = "elkuser"
     admin_password = var.upassword
-    #custom_data    = file("elk.sh")
+    custom_data    = file("elk.sh")
 
   }
 
@@ -543,13 +543,7 @@ resource "azurerm_virtual_machine" "elkvm" {
   }
   
   provisioner "file" {
-    source      = "elk.sh"
-    destination = "/elk.sh"
-  }
-  
-  provisioner "remote-exec" {
-    inline = [
-      "sh /elk.sh",
-    ]
+    source      = "elkupdate.sh"
+    destination = "/home/elkuser/elkupdate.sh"
   }
 }
