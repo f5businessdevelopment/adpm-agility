@@ -535,15 +535,4 @@ resource "azurerm_virtual_machine" "elkvm" {
     propagate_at_launch = true
   }
 
-  provisioner "file" {
-    source      = "elkupdate.sh"
-    destination = "/home/elkuser/elkupdate.sh"
-
-    connection {
-      type     = "ssh"
-      user     = "elkuser"
-      password = var.upassword
-      host     = data.azurerm_public_ip.elk_public_ip.ip_address
-    }
-  }
 }
