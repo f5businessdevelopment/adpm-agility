@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Disable stdout
-#exec 2>/dev/null
+exec 2>/dev/null
 
 setup_passwords() {
   sudo cat << EOF > pass

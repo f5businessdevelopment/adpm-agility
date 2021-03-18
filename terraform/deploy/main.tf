@@ -546,4 +546,11 @@ resource "azurerm_virtual_machine" "elkvm" {
     source      = "elkupdate.sh"
     destination = "/home/elkuser/elkupdate.sh"
   }
+  
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod +x /home/elkuser/elkupdate.sh",
+      "sudo /home/elkuser/elkupdate.sh",
+    ]
+  }
 }
