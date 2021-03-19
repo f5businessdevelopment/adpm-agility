@@ -2,7 +2,7 @@ name: scale-azure
 on:
   repository_dispatch:
     types:
-      - student-3bcb
+      - student-4e25
 jobs:
   setup:
     name: setup
@@ -462,6 +462,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+          token: ${{ secrets.WF_ROUTER_PAT }}
 
       - name: install consul client
         run: |
