@@ -462,7 +462,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-          token: ${{ secrets.WF_ROUTER_PAT }}
+        with:
+          token: {{ secrets.WF_ROUTER_PAT }}
 
       - name: install consul client
         run: |
