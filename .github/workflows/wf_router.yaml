@@ -61,6 +61,6 @@ jobs:
 
     - name: invoke webhook
       run: |
-        declare -a command=(curl -H "Authorization: token ${{ secrets.MY_PAT }}" --request POST --data '{"event_type": "student-${{ github.event.client_payload.student_id }}", "client_payload": ${{ env.CLIENT_PAYLOAD}}}' https://api.github.com/repos/f5businessdevelopment/adpm-agility/dispatches)
+        declare -a command=(curl -H "Authorization: token ${{ secrets.WF_ROUTER_PAT }}" --request POST --data '{"event_type": "student-${{ github.event.client_payload.student_id }}", "client_payload": ${{ env.CLIENT_PAYLOAD}}}' https://api.github.com/repos/f5businessdevelopment/adpm-agility/dispatches)
         "${command[@]}"
         
