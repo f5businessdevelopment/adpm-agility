@@ -20,13 +20,13 @@ jobs:
       with:
         token: ${{ secrets.WF_ROUTER_PAT }}
 
-    - name: write payload
-      run: |
-        echo "${{ env.CLIENT_PAYLOAD }}" > client.txt
+    # - name: write payload
+    #   run: |
+    #     echo "${{ env.CLIENT_PAYLOAD }}" > client.txt
 
-    - name: read payload
-      run: |
-        cat client.txt
+    # - name: read payload
+    #   run: |
+    #     cat client.txt
  #       cat client.txt | sed s/{/\'{/
     
     - name: check if exists 
