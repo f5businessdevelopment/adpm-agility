@@ -18,7 +18,7 @@ jobs:
     - name: setup
       uses: actions/checkout@v2
       with:
-        token: ${{ secrets.MY_PAT }}
+        token: ${{ secrets.WF_ROUTER_PAT }}
 
     - name: write payload
       run: |
