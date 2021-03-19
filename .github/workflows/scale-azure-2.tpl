@@ -499,7 +499,7 @@ jobs:
           git config user.name "Your Name"
           git commit -m "changed"
           git push 
-          echo "COMMITTING"
+          echo "COMMITTED"
       
 
       
