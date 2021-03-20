@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+     DATE_TIME: DDATE
 
     outputs:
       can_scale: ${{ steps.test.outputs.can_scale }}

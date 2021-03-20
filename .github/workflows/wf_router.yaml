@@ -44,7 +44,8 @@ jobs:
 
     - name: render workflow
       run: |
-        cat .github/workflows/scale-azure-2.tpl | sed ' s/WORKFLOW_NAME/student-${{ github.event.client_payload.student_id}}/ ' > .github/workflows/student-${{ github.event.client_payload.student_id}}.yaml
+        with:
+        cat .github/workflows/scale-azure-2.tpl | sed ' s/WORKFLOW_NAME/student-${{ github.event.client_payload.student_id}}/; s/DDATE/${{ steps.get_date.outputs.date_time }} ' > .github/workflows/student-${{ github.event.client_payload.student_id}}.yaml
 
     - name: cat yaml
       run: cat .github/workflows/student-${{ github.event.client_payload.student_id }}.yaml
