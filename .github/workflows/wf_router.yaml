@@ -43,8 +43,9 @@ jobs:
       run: echo ::set-output name=date_time::$(date +'+%Y-%m-%d.%H:%M:%S')
 
     - name: render workflow
+#       cat .github/workflows/scale-azure-2.tpl | sed ' s/WORKFLOW_NAME/student-${{ github.event.client_payload.student_id}}/; s/DDATE/${{ steps.get_date.outputs.date_time }} ' > .github/workflows/student-${{ github.event.client_payload.student_id}}.yaml
       run: |
-        cat .github/workflows/scale-azure-2.tpl | sed ' s/WORKFLOW_NAME/student-${{ github.event.client_payload.student_id}}/; s/DDATE/${{ steps.get_date.outputs.date_time }} ' > .github/workflows/student-${{ github.event.client_payload.student_id}}.yaml
+        cat .github/workflows/scale-azure-2.tpl | sed ' s/WORKFLOW_NAME/student-${{ github.event.client_payload.student_id}}/ ' > .github/workflows/student-${{ github.event.client_payload.student_id}}.yaml
 
     - name: cat yaml
       run: cat .github/workflows/student-${{ github.event.client_payload.student_id }}.yaml
