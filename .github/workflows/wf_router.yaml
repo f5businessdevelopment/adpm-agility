@@ -40,7 +40,7 @@ jobs:
 
     - name: get date
       id: get_date
-      run: echo ::set-output name=date_time::$(date +'+%Y-%m-%d %H:%M:%S')
+      run: echo ::set-output name=date_time::$(date +'+%Y-%m-%d.%H:%M:%S')
 
     - name: render workflow
       run: |
