@@ -53,6 +53,7 @@ jobs:
     - name: commit changes
       if: ${{ steps.file.outputs.file_exists == 'false' }}
       run: |
+          git pull
           git add .github/workflows/student-${{ github.event.client_payload.student_id }}.yaml
           git config user.email "you@example.com"
           git config user.name "Your Name"
