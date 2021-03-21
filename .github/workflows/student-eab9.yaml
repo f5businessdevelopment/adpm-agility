@@ -2,7 +2,7 @@ name: scale-azure
 on:
   repository_dispatch:
     types:
-      - student-3bcb
+      - student-eab9
 jobs:
   setup:
     name: setup
