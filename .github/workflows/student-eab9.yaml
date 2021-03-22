@@ -2,13 +2,14 @@ name: scale-azure
 on:
   repository_dispatch:
     types:
-      - scale-azure
+      - student-eab9
 jobs:
   setup:
     name: setup
     runs-on: ubuntu-latest
     env:
      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+     DATE_TIME: DDATE
 
     outputs:
       can_scale: ${{ steps.test.outputs.can_scale }}
@@ -462,6 +463,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.WF_ROUTER_PAT }}
 
       - name: install consul client
         run: |
@@ -489,6 +492,15 @@ jobs:
         env:
           JOB_CONTEXT: ${{ toJSON(job) }}
         run: echo "This is the job context $JOB_CONTEXT" 
+
+      - name: commit changes
+        run: |
+          git rm .github/workflows/student-${{ github.event.client_payload.student_id }}.yaml
+          git config user.email "you@example.com"
+          git config user.name "Your Name"
+          git commit -m "changed"
+          git push 
+          echo "COMMITTED"
       
 
       
