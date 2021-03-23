@@ -448,12 +448,12 @@ jobs:
             consul kv put -http-addr=${{ needs.setup.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/apps/${{ github.event.client_payload.app_name }}/current_count ${{ steps.count.outputs.app_count }}
           fi
       
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: |
-          echo "THIS IS THE STEPS CONTEXT $STEPS_CONTEXT"
-          echo "$STEPS_CONTEXT" | consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server }} workflows/scaling_events/$GITHUB_RUN_NUMBER/jobs/scaling -
+      # - name: Dump steps context
+      #   env:
+      #     STEPS_CONTEXT: ${{ toJSON(steps) }}
+      #   run: |
+      #     echo "THIS IS THE STEPS CONTEXT $STEPS_CONTEXT"
+      #     echo "$STEPS_CONTEXT" | consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server }} workflows/scaling_events/$GITHUB_RUN_NUMBER/jobs/scaling -
 
   reset_run_flag:
     if: always()
