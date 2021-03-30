@@ -7,7 +7,7 @@ variable bigip_count {
 variable app_count {
   description = "Number of backend application instances to create( From terraform 0.13, module supports count feature to spin mutliple instances )"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable app_name {
