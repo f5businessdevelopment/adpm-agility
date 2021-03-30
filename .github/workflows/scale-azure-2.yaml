@@ -93,6 +93,8 @@ jobs:
         run: |
           echo ::set-output name=student_id::${{ github.event.client_payload.student_id }}
           echo ::set-output name=app_name::${{ github.event.client_payload.app_name }}
+          echo ::set-output name=scaling_type::${{ github.event.client_payload.scaling_type }}
+          echo ::set-output name=scaling_direction::${{ github.event.client_payload.scaling_direction }}
 
       - name: install consul client
         run: sudo sh scripts/consul.sh 
@@ -446,12 +448,12 @@ jobs:
             consul kv put -http-addr=${{ needs.setup.outputs.consul_server }} adpm/labs/agility/students/${{ github.event.client_payload.student_id }}/scaling/apps/${{ github.event.client_payload.app_name }}/current_count ${{ steps.count.outputs.app_count }}
           fi
       
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJSON(steps) }}
-        run: |
-          echo "THIS IS THE STEPS CONTEXT $STEPS_CONTEXT"
-          echo "$STEPS_CONTEXT" | consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server }} workflows/scaling_events/$GITHUB_RUN_NUMBER/jobs/scaling -
+      # - name: Dump steps context
+      #   env:
+      #     STEPS_CONTEXT: ${{ toJSON(steps) }}
+      #   run: |
+      #     echo "THIS IS THE STEPS CONTEXT $STEPS_CONTEXT"
+      #     echo "$STEPS_CONTEXT" | consul kv put -http-addr=${{ needs.setup.outputs.student_consul_server }} workflows/scaling_events/$GITHUB_RUN_NUMBER/jobs/scaling -
 
   reset_run_flag:
     if: always()
