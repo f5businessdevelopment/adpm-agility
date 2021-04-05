@@ -219,7 +219,7 @@ resource "azurerm_availability_set" "avset" {
 }
 
 data "template_file" "backendapp" {
-  template = file("${backendapp.tpl")
+  template = file("backendapp.tpl")
   vars = {
     student_id      = local.student_id
   }
