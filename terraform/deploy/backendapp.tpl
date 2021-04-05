@@ -9,10 +9,10 @@ local_ipv4=`echo $(curl -s -f -H Metadata:true "http://169.254.169.254/metadata/
 
 #Download Consul
 CONSUL_VERSION="1.9.0"
-curl --silent --remote-name https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
+curl --silent --remote-name https://releases.hashicorp.com/consul/1.9.0/consul_1.9.0_linux_amd64.zip
 
 #Install Consul
-unzip consul_${CONSUL_VERSION}_linux_amd64.zip
+unzip consul_1.9.0_linux_amd64.zip
 sudo chown root:root consul
 sudo mv consul /usr/local/bin/
 consul -autocomplete-install
