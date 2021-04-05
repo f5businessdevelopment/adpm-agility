@@ -55,7 +55,7 @@ ui = true
 EOF
 
 cat << EOF > /etc/consul.d/client.hcl
-advertise_addr = "${local_ipv4}"
+advertise_addr = "$local_ipv4"
 retry_join = ["10.2.1.100"]
 EOF
 
