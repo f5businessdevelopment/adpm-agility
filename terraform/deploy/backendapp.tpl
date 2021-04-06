@@ -126,12 +126,6 @@ server {
 EOF
 
 cat << EOF > /var/www/html/index.php
-<html>
-    <head>
-    <b><center><h1>Student ${student_id} Scaling Operations Status</h1></center></b>
-    <meta http-equiv="refresh" content="<?php echo $sec ?>;URL='<?php echo $page ?>'">
-    </head>
-    <body><center>
 <?php
 \$page = \$_SERVER['PHP_SELF'];
 \$sec = "5";
@@ -141,7 +135,7 @@ cat << EOF > /var/www/html/index.php
 \$t=time();
 // echo(\$t . "<br>");
 echo(date("Y-m-d.H:i:s",\$t));
-echo "<br><br>";
+echo "<br>";
 
 \$url1 = array("is_running" => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/is_running?raw");
 \$url2 = array("app_current_count" => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/apps/app1/current_count?raw");
@@ -156,7 +150,7 @@ echo "<br><br>";
 
 foreach (\$urls as \$x => \$x_value)
 {
-    // echo "<br>" . \$x . ", Value=" . \$x_value;
+    // echo "Key=" . \$x . ", Value=" . \$x_value;
   echo "Key=" . \$x;
   \$headers    = [];
   \$headers[]  = 'X-Consul-Token: 6ae6afa6-a8f3-06ba-b960-515c7963d23a';
@@ -174,7 +168,16 @@ foreach (\$urls as \$x => \$x_value)
 }
 curl_close(\$ch);
 ?>
-</center></body></html>
+
+<html>
+    <head>
+    <meta http-equiv="refresh" content="<?php echo \$sec?>;URL='<?php echo \$page?>'">
+    </head>
+    <body>
+    <?php
+    ?>
+    </body>
+</html>
 EOF
 sudo /etc/init.d/php7.2-fpm restart && sudo systemctl restart nginx
 
