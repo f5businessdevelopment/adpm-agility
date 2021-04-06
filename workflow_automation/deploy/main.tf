@@ -213,6 +213,13 @@ resource "azurerm_availability_set" "avset" {
  managed                      = true
 }
 
+data "template_file" "backendapp" {
+  template = file("backendapp.tpl")
+  vars = {
+    student_id      = local.student_id
+  }
+}
+
 resource "azurerm_virtual_machine" "app" {
  count                 = local.app_count
  name                  = "app_vm_${count.index}"
@@ -264,7 +271,7 @@ resource "azurerm_virtual_machine" "app" {
    computer_name  = format("appserver-%s", count.index)
    admin_username = "appuser"
    admin_password = var.upassword
-   custom_data    = filebase64("../../configs/backend.sh")
+   custom_data    = data.template_file.backendapp.rendered
  }
 
  os_profile_linux_config {
