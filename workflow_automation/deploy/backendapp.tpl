@@ -130,7 +130,6 @@ cat << EOF > /var/www/html/index.php
 \$page = \$_SERVER['PHP_SELF'];
 \$sec = "5";
 \$t=time();
-echo "<center>"
 echo(date("Y-m-d.H:i:s",\$t));
 echo "<br><br>";
 
@@ -146,7 +145,6 @@ echo "<br><br>";
 
 foreach (\$urls as \$x => \$x_value)
 {
-    // echo "Key=" . \$x . ", Value=" . \$x_value;
   echo "<br>" . \$x;
   \$headers    = [];
   \$headers[]  = 'X-Consul-Token: 6ae6afa6-a8f3-06ba-b960-515c7963d23a';
@@ -158,7 +156,6 @@ foreach (\$urls as \$x => \$x_value)
 
   echo "&nbsp";
   curl_exec(\$ch);
-  echo "<center>"";
 }
 curl_close(\$ch);
 ?>
