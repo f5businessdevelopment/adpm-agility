@@ -179,7 +179,7 @@ curl_close(\$ch);
     </body>
 </html>
 EOF
-sudo sytemctl restart nginx
+sudo /etc/init.d/php7.2-fpm restart && sudo systemctl restart nginx
 
 
 
