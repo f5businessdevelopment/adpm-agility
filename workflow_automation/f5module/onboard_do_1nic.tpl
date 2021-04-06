@@ -23,7 +23,7 @@
             "servers": [
                     ${ntp_servers}
             ],
-            "timezone": "UTC"
+            "timezone": "US/Eastern"
         }
     }
 }
