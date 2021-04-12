@@ -127,47 +127,50 @@ EOF
 
 cat << EOF > /var/www/html/index.php
 <?php
-\$page = \$_SERVER['PHP_SELF'];
-\$sec = "5";
-\$t=time();
-echo(date("Y-m-d.H:i:s",\$t));
-echo "<br><br>";
+$page = $_SERVER['PHP_SELF'];
+$sec = "5";
+$t=time();
+echo "<center><b>";
+$student = "<h1>Student ${student_id} Scaling Operations Status</h1>";
+echo $student;
+echo "<br>";
+echo(date("Y-m-d.H:i:s",$t));
+echo "</b></center><br>";
+$url1 = array("Scaling operation active? " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/is_running?raw");
+$url2 = array("Current backend workload count: " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/apps/app1/current_count?raw");
+$url3 = array("Last workload scaling event timestamp: " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/apps/app1/last_modified_timestamp?raw");
+$url4 = array("Current BIG-IP cluster count: " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/bigip/current_count?raw");
+$url5 = array("Last BIG-IP scaling event timestamp" => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/bigip/last_modified_timestamp?raw");
 
-\$url1 = array("Scaling operation active? " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/is_running?raw");
-\$url2 = array("Current backend workload count: " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/apps/app1/current_count?raw");
-\$url3 = array("Last workload scaling event timestamp: " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/apps/app1/last_modified_timestamp?raw");
-\$url4 = array("Current BIG-IP cluster count: " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/bigip/current_count?raw");
-\$url5 = array("Last BIG-IP scaling event timestamp" => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/bigip/last_modified_timestamp?raw");
-
-\$urls = array_merge(\$url1, \$url2, \$url3, \$url4, \$url5);
-\$array_length = count(\$urls);
-\$ch = curl_init();
-
-foreach (\$urls as \$x => \$x_value)
+$urls = array_merge($url1, $url2, $url3, $url4, $url5);
+$array_length = count($urls);
+$ch = curl_init();
+echo "<center><table cellpadding=10 border=5 bordercolor='#0000ff'><tr><td valign='middle' style='text-align:left'>";
+foreach ($urls as $x => $x_value)
 {
-  echo "<br>" . \$x;
-  \$headers    = [];
-  \$headers[]  = 'X-Consul-Token: 6ae6afa6-a8f3-06ba-b960-515c7963d23a';
-  curl_setopt(\$ch, CURLOPT_HTTPHEADER, \$headers);
-  curl_setopt(\$ch, CURLOPT_URL, \$x_value);
-  curl_setopt(\$ch, CURLOPT_HEADER, false);
-  curl_setopt(\$ch, CURLOPT_RETURNTRANSFER, false);
-  curl_setopt(\$ch, CURLOPT_VERBOSE, true);
+  echo "<br>" . $x;
+  $headers    = [];
+  $headers[]  = 'X-Consul-Token: 6ae6afa6-a8f3-06ba-b960-515c7963d23a';
+  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  curl_setopt($ch, CURLOPT_URL, $x_value);
+  curl_setopt($ch, CURLOPT_HEADER, false);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
+  curl_setopt($ch, CURLOPT_VERBOSE, true);
 
   echo "&nbsp";
-  curl_exec(\$ch);
+
+  curl_exec($ch);
 }
-curl_close(\$ch);
+echo "</td></tr></table></center>";
+curl_close($ch);
 ?>
 
 <html>
     <head>
-    <meta http-equiv="refresh" content="<?php echo \$sec?>;URL='<?php echo \$page?>'">
+    <meta http-equiv="refresh" content="<?php echo $sec?>;URL='<?php echo $page?>'">
     </head>
-    <body><center><h1><b>Student ${student_id} Scaling Operations Status</b></h1>
     <?php
     ?>
-    </center></body>
 </html>
 EOF
 sudo /etc/init.d/php7.2-fpm restart && sudo systemctl restart nginx
