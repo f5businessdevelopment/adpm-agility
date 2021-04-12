@@ -148,8 +148,8 @@ echo "<center><table cellpadding=10 border=5 bordercolor='#0000ff'><tr><td valig
 foreach (\$urls as \$x => \$x_value)
 {
   echo "<br>" . \$x;
-  $headers    = [];
-  $headers[]  = 'X-Consul-Token: 6ae6afa6-a8f3-06ba-b960-515c7963d23a';
+  \$headers    = [];
+  \$headers[]  = 'X-Consul-Token: 6ae6afa6-a8f3-06ba-b960-515c7963d23a';
   curl_setopt(\$ch, CURLOPT_HTTPHEADER, \$headers);
   curl_setopt(\$ch, CURLOPT_URL, \$x_value);
   curl_setopt(\$ch, CURLOPT_HEADER, false);
