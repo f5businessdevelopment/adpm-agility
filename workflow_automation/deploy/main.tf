@@ -213,12 +213,12 @@ resource "azurerm_availability_set" "avset" {
  managed                      = true
 }
 
-data "template_file" "backendapp" {
-  template = file("backendapp.tpl")
-  vars = {
-    student_id      = local.student_id
-  }
-}
+#data "template_file" "backendapp" {
+#  template = file("backendapp.tpl")
+#  vars = {
+#    student_id      = local.student_id
+#  }
+#}
 
 resource "azurerm_virtual_machine" "app" {
  count                 = local.app_count
