@@ -219,11 +219,9 @@ resource "azurerm_availability_set" "avset" {
 }
 
 data "template_file" "backendapp" {
-  count             = var.app_count
   template          = file("backendapp.tpl")
   vars = {
     student_id      = local.student_id
-    host_name       = format("Workload-%s", count.index)
   }
 }
 
@@ -278,7 +276,7 @@ resource "azurerm_virtual_machine" "app" {
    computer_name  = format("workload-%s", count.index)
    admin_username = "appuser"
    admin_password = var.upassword
-   custom_data    = data.template_file.backendapp.${count.index}.rendered
+   custom_data    = data.template_file.backendapp.rendered
  }
 
  os_profile_linux_config {
