@@ -64,7 +64,7 @@ resource "null_resource" "azure-cli" {
 #Create N-nic bigip
 #
 module bigip {
-  count 		     = var.bigip_count
+  count 		     = local.bigip_count
   source                     = "../f5module/"
   prefix                     = format("%s-1nic", var.prefix)
   resource_group_name        = azurerm_resource_group.rg.name
@@ -85,7 +85,7 @@ module bigip {
 
 resource "null_resource" "clusterDO" {
 
-  count = var.bigip_count
+  count = local.bigip_count
 
   provisioner "local-exec" {
     command = "cat > DO_1nic-instance${count.index}.json <<EOL\n ${module.bigip[count.index].onboard_do}\nEOL"
@@ -187,7 +187,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_https2" {
 # Create backend application workloads
 #
 resource "azurerm_network_interface" "appnic" {
- count               = var.app_count
+ count               = local.app_count
  name                = "app_nic_${count.index}"
  location            = azurerm_resource_group.rg.location
  resource_group_name = azurerm_resource_group.rg.name
@@ -200,7 +200,7 @@ resource "azurerm_network_interface" "appnic" {
 }
 
 resource "azurerm_managed_disk" "appdisk" {
- count                = var.app_count
+ count                = local.app_count
  name                 = "datadisk_existing_${count.index}"
  location             = azurerm_resource_group.rg.location
  resource_group_name  = azurerm_resource_group.rg.name
@@ -226,7 +226,7 @@ resource "azurerm_availability_set" "avset" {
 #}
 
 resource "azurerm_virtual_machine" "app" {
- count                 = var.app_count
+ count                 = local.app_count
  name                  = "app_vm_${count.index}"
  location              = azurerm_resource_group.rg.location
  availability_set_id   = azurerm_availability_set.avset.id
@@ -388,11 +388,11 @@ resource "consul_keys" "app" {
   # Set the CNAME of our load balancer as a key
   key {
     path  = format("adpm/labs/agility/students/%s/scaling/bigip/current_count", local.student_id)
-    value = var.bigip_count
+    value = local.bigip_count
   }
   key {
     path  = format("adpm/labs/agility/students/%s/scaling/apps/%s/current_count", local.student_id, var.app_name)
-    value = var.app_count
+    value = local.app_count
   }
   key {
     path  = format("adpm/labs/agility/students/%s/create_timestamp", local.student_id)
