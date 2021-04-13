@@ -35,7 +35,7 @@ resource azurerm_resource_group rg {
 # Create a load balancer resources for bigip(s) via azurecli
 #
 resource "azurerm_public_ip" "alb_public_ip" {
-  name                = format("%s-alb-pip", local.student_id)
+  name                = format("student-%s-alb-pip", local.student_id)
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
@@ -48,7 +48,7 @@ data "template_file" "azure_cli_sh" {
   vars = {
     rg_name         = azurerm_resource_group.rg.name
     public_ip       = azurerm_public_ip.alb_public_ip.name
-    lb_name         = format("%s-loadbalancer", local.student_id)         
+    lb_name         = format("student-%s-loadbalancer", local.student_id)         
   }
 }
 
@@ -66,7 +66,7 @@ resource "null_resource" "azure-cli" {
 module bigip {
   count 		     = local.bigip_count
   source                     = "../f5module/"
-  prefix                     = format("%s-1nic", var.prefix)
+  prefix                     = format("student-%s-1nic", var.prefix)
   resource_group_name        = azurerm_resource_group.rg.name
   mgmt_subnet_ids            = [{ "subnet_id" = data.azurerm_subnet.mgmt.id, "public_ip" = true, "private_ip_primary" =  ""}]
   mgmt_securitygroup_ids     = [module.mgmt-network-security-group.network_security_group_id]
@@ -104,7 +104,7 @@ resource "null_resource" "clusterDO" {
 
 module "network" {
   source              = "Azure/vnet/azurerm"
-  vnet_name           = format("%s-vnet", local.student_id)
+  vnet_name           = format("student-%s-vnet", local.student_id)
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = [var.cidr]
   subnet_prefixes     = [cidrsubnet(var.cidr, 8, 1)]
@@ -133,7 +133,7 @@ data "azurerm_subnet" "mgmt" {
 module mgmt-network-security-group {
   source              = "Azure/network-security-group/azurerm"
   resource_group_name = azurerm_resource_group.rg.name
-  security_group_name = format("%s-mgmt-nsg", local.student_id)
+  security_group_name = format("student-%s-mgmt-nsg", local.student_id)
   depends_on = [
     azurerm_resource_group.rg,
   ]
@@ -158,7 +158,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_https" {
   destination_address_prefix  = "*"
   source_address_prefixes     = var.AllowedIPs
   resource_group_name         = azurerm_resource_group.rg.name
-  network_security_group_name = format("%s-mgmt-nsg", local.student_id)
+  network_security_group_name = format("student-%s-mgmt-nsg", local.student_id)
   depends_on                  = [module.mgmt-network-security-group]
 }
 resource "azurerm_network_security_rule" "mgmt_allow_ssh" {
@@ -172,7 +172,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_ssh" {
   destination_address_prefix  = "*"
   source_address_prefixes     = var.AllowedIPs
   resource_group_name         = azurerm_resource_group.rg.name
-  network_security_group_name = format("%s-mgmt-nsg", local.student_id)
+  network_security_group_name = format("student-%s-mgmt-nsg", local.student_id)
   depends_on                  = [module.mgmt-network-security-group]
 }
 resource "azurerm_network_security_rule" "mgmt_allow_https2" {
@@ -186,7 +186,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_https2" {
   destination_address_prefix  = "*"
   source_address_prefixes     = var.AllowedIPs
   resource_group_name         = azurerm_resource_group.rg.name
-  network_security_group_name = format("%s-mgmt-nsg", local.student_id)
+  network_security_group_name = format("student-%s-mgmt-nsg", local.student_id)
   depends_on                  = [module.mgmt-network-security-group]
 }
 
@@ -443,7 +443,7 @@ resource "consul_keys" "app" {
 # Create Azure log analytics workspace
 #
 resource "azurerm_log_analytics_workspace" "law" {
-  name                = format("%s-law", local.student_id)
+  name                = format("student-%s-law", local.student_id)
   sku                 = "PerNode"
   retention_in_days   = 300
   resource_group_name = azurerm_resource_group.rg.name
