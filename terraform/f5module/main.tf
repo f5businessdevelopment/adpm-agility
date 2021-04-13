@@ -301,7 +301,7 @@ data "template_file" "azure_cli_add_sh" {
     rg_name         = data.azurerm_resource_group.bigiprg.name
     nic_name        = azurerm_network_interface.mgmt_nic[count.index].name
     ip_config       = "${local.instance_prefix}-mgmt-ip-${count.index}"
-    lb_name         = format("%s-loadbalancer", local.student_id)   
+    lb_name         = format("student-%s-loadbalancer", local.student_id)   
     student_id      = local.student_id
     instance_id     = local.instance_prefix
     app_name        = var.app_name
