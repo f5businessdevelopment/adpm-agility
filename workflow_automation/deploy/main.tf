@@ -24,9 +24,10 @@ locals {
 # Create a resource group
 #
 resource azurerm_resource_group rg {
-  name     = format("student-%s-rg", local.student_id)
+  name     = format("student-%s-%s-rg", local.student_id, random_id.id.hex)
   location = var.location
   tags = {
+    creation_timestamp = timestamp()
   }
 }
 
@@ -103,7 +104,7 @@ resource "null_resource" "clusterDO" {
 
 module "network" {
   source              = "Azure/vnet/azurerm"
-  vnet_name           = format("%s-vnet", local.student_id)
+  vnet_name           = format("%s-vnet-%s", local.student_id, random_id.id.hex)
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = [var.cidr]
   subnet_prefixes     = [cidrsubnet(var.cidr, 8, 1)]
