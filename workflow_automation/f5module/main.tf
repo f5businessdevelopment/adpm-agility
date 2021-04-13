@@ -23,7 +23,7 @@ terraform {
 #
 # Create a random id
 #
-resource random_id id {
+resource "random_id" "module_id" {
   byte_length = 2
 }
 
