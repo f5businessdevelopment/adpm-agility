@@ -1,9 +1,11 @@
 provider azurerm {
     features {}
 }
+
 provider "consul" {
   address = "3.95.15.85:8500"
 }
+
 
 #
 # Create a random id
@@ -24,6 +26,9 @@ locals {
 resource azurerm_resource_group rg {
   name     = format("student-%s-%s-rg", local.student_id, random_id.id.hex)
   location = var.location
+  tags = {
+    creation_timestamp = timestamp()
+  }
 }
 
 #
@@ -59,7 +64,7 @@ resource "null_resource" "azure-cli" {
 #Create N-nic bigip
 #
 module bigip {
-  count 		                 = local.bigip_count
+  count 		     = var.bigip_count
   source                     = "../f5module/"
   prefix                     = format("%s-1nic", var.prefix)
   resource_group_name        = azurerm_resource_group.rg.name
@@ -80,7 +85,7 @@ module bigip {
 
 resource "null_resource" "clusterDO" {
 
-  count = local.bigip_count
+  count = var.bigip_count
 
   provisioner "local-exec" {
     command = "cat > DO_1nic-instance${count.index}.json <<EOL\n ${module.bigip[count.index].onboard_do}\nEOL"
@@ -182,7 +187,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_https2" {
 # Create backend application workloads
 #
 resource "azurerm_network_interface" "appnic" {
- count               = local.app_count
+ count               = var.app_count
  name                = "app_nic_${count.index}"
  location            = azurerm_resource_group.rg.location
  resource_group_name = azurerm_resource_group.rg.name
@@ -195,7 +200,7 @@ resource "azurerm_network_interface" "appnic" {
 }
 
 resource "azurerm_managed_disk" "appdisk" {
- count                = local.app_count
+ count                = var.app_count
  name                 = "datadisk_existing_${count.index}"
  location             = azurerm_resource_group.rg.location
  resource_group_name  = azurerm_resource_group.rg.name
@@ -214,14 +219,14 @@ resource "azurerm_availability_set" "avset" {
 }
 
 #data "template_file" "backendapp" {
-#  template = file("backendapp.tpl")
+#  template          = file("backendapp.tpl")
 #  vars = {
 #    student_id      = local.student_id
 #  }
 #}
 
 resource "azurerm_virtual_machine" "app" {
- count                 = local.app_count
+ count                 = var.app_count
  name                  = "app_vm_${count.index}"
  location              = azurerm_resource_group.rg.location
  availability_set_id   = azurerm_availability_set.avset.id
@@ -239,7 +244,7 @@ resource "azurerm_virtual_machine" "app" {
  storage_image_reference {
    publisher = "Canonical"
    offer     = "UbuntuServer"
-   sku       = "16.04-LTS"
+   sku       = "18.04-LTS"
    version   = "latest"
  }
 
@@ -268,7 +273,7 @@ resource "azurerm_virtual_machine" "app" {
  }
 
  os_profile {
-   computer_name  = format("appserver-%s", count.index)
+   computer_name  = format("workload-%s", count.index)
    admin_username = "appuser"
    admin_password = var.upassword
    custom_data    = filebase64("../../configs/backend.sh")
@@ -351,7 +356,7 @@ resource "azurerm_virtual_machine" "consulvm" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "16.04.0-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
 
@@ -383,11 +388,11 @@ resource "consul_keys" "app" {
   # Set the CNAME of our load balancer as a key
   key {
     path  = format("adpm/labs/agility/students/%s/scaling/bigip/current_count", local.student_id)
-    value = local.bigip_count
+    value = var.bigip_count
   }
   key {
     path  = format("adpm/labs/agility/students/%s/scaling/apps/%s/current_count", local.student_id, var.app_name)
-    value = local.app_count
+    value = var.app_count
   }
   key {
     path  = format("adpm/labs/agility/students/%s/create_timestamp", local.student_id)
@@ -404,7 +409,7 @@ resource "consul_keys" "app" {
   key {
     path  = format("adpm/labs/agility/students/%s/scaling/is_running", local.student_id)
     value = "false"
-  }
+  } 
   key {
     path  = format("adpm/labs/agility/students/%s/consul_vip", local.student_id)
     value = "http://${azurerm_public_ip.mgmt_public_ip.ip_address}:8500"
@@ -453,6 +458,7 @@ resource "azurerm_log_analytics_solution" "sentinel" {
 #
 #  Create ELK stack
 #
+
 resource "azurerm_public_ip" "elk_public_ip" {
   name                = "pip-mgmt-elk"
   location            = var.location
@@ -462,6 +468,11 @@ resource "azurerm_public_ip" "elk_public_ip" {
     Name   = "pip-mgmt-elk"
     source = "terraform"
   }
+}
+
+data  "azurerm_public_ip" "elk_public_ip" {
+  name                = azurerm_public_ip.elk_public_ip.name
+  resource_group_name = azurerm_resource_group.rg.name
 }
 
 resource "azurerm_network_interface" "elkvm-ext-nic" {
@@ -529,5 +540,17 @@ resource "azurerm_virtual_machine" "elkvm" {
     tag_name            = "Env"
     value               = "elk"
     propagate_at_launch = true
+  }
+
+  connection {
+      type     = "ssh"
+      user     = "elkuser"
+      password = var.upassword
+      host     = data.azurerm_public_ip.elk_public_ip.ip_address
+  }
+  
+  provisioner "file" {
+    source      = "elkupdate.sh"
+    destination = "/home/elkuser/elkupdate.sh"
   }
 }
