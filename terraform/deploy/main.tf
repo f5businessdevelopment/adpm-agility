@@ -64,7 +64,7 @@ resource "null_resource" "azure-cli" {
 #Create N-nic bigip
 #
 module bigip {
-  count 		     = var.bigip_count
+  count 		                 = var.bigip_count
   source                     = "../f5module/"
   prefix                     = format("student-%s-1nic", var.prefix)
   resource_group_name        = azurerm_resource_group.rg.name
