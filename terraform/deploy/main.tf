@@ -276,7 +276,7 @@ resource "azurerm_virtual_machine" "app" {
    computer_name  = format("workload-%s", count.index)
    admin_username = "appuser"
    admin_password = var.upassword
-   custom_data    = filebase64("backend.sh")
+   custom_data    = filebase64("../../configs/backend.sh")
  }
 
  os_profile_linux_config {
