@@ -109,6 +109,9 @@ module "network" {
   address_space       = [var.cidr]
   subnet_prefixes     = [cidrsubnet(var.cidr, 8, 1)]
   subnet_names        = ["mgmt-subnet"]
+  depends_on = [
+    azurerm_resource_group.rg,
+  ]
 
   tags = {
     environment = "dev"
@@ -130,6 +133,11 @@ module mgmt-network-security-group {
   source              = "Azure/network-security-group/azurerm"
   resource_group_name = azurerm_resource_group.rg.name
   security_group_name = format("%s-mgmt-nsg", local.student_id )
+  
+  depends_on = [
+    azurerm_resource_group.rg,
+  ]
+  
   tags = {
     environment = "dev"
     costcenter  = "terraform"
