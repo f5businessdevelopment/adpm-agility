@@ -133,6 +133,8 @@ cat << EOF > /var/www/html/index.php
 echo "<center><b>";
 echo "<h1>Student ${student_id} Scaling Operations Status</h1>";
 echo "<br>";
+echo "<h2>${host_name}</h2>";
+echo "<br>";
 echo(date("m-d-Y   H:i:s",\$t));
 echo "</b></center><br>";
 \$url1 = array("Scaling operation active? " => "http://3.95.15.85:8500/v1/kv/adpm/labs/agility/students/${student_id}/scaling/is_running?raw");
