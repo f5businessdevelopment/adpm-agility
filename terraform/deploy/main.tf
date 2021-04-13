@@ -24,7 +24,7 @@ locals {
 # Create a resource group
 #
 resource azurerm_resource_group rg {
-  name     = format("student-%s-%s-rg", local.student_id, random_id.id.hex)
+  name     = format("student-%s-rg", local.student_id)
   location = var.location
   tags = {
     creation_timestamp = timestamp()
@@ -104,7 +104,7 @@ resource "null_resource" "clusterDO" {
 
 module "network" {
   source              = "Azure/vnet/azurerm"
-  vnet_name           = format("%s-vnet-%s", local.student_id, random_id.id.hex)
+  vnet_name           = format("%s-vnet", local.student_id)
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = [var.cidr]
   subnet_prefixes     = [cidrsubnet(var.cidr, 8, 1)]
@@ -129,7 +129,7 @@ data "azurerm_subnet" "mgmt" {
 module mgmt-network-security-group {
   source              = "Azure/network-security-group/azurerm"
   resource_group_name = azurerm_resource_group.rg.name
-  security_group_name = format("%s-mgmt-nsg-%s", local.student_id, random_id.id.hex )
+  security_group_name = format("%s-mgmt-nsg", local.student_id )
   tags = {
     environment = "dev"
     costcenter  = "terraform"
@@ -151,7 +151,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_https" {
   destination_address_prefix  = "*"
   source_address_prefixes     = var.AllowedIPs
   resource_group_name         = azurerm_resource_group.rg.name
-  network_security_group_name = format("%s-mgmt-nsg-%s", local.student_id, random_id.id.hex)
+  network_security_group_name = format("%s-mgmt-nsg", local.student_id)
   depends_on                  = [module.mgmt-network-security-group]
 }
 resource "azurerm_network_security_rule" "mgmt_allow_ssh" {
@@ -165,7 +165,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_ssh" {
   destination_address_prefix  = "*"
   source_address_prefixes     = var.AllowedIPs
   resource_group_name         = azurerm_resource_group.rg.name
-  network_security_group_name = format("%s-mgmt-nsg-%s", local.student_id, random_id.id.hex)
+  network_security_group_name = format("%s-mgmt-nsg", local.student_id)
   depends_on                  = [module.mgmt-network-security-group]
 }
 resource "azurerm_network_security_rule" "mgmt_allow_https2" {
@@ -179,7 +179,7 @@ resource "azurerm_network_security_rule" "mgmt_allow_https2" {
   destination_address_prefix  = "*"
   source_address_prefixes     = var.AllowedIPs
   resource_group_name         = azurerm_resource_group.rg.name
-  network_security_group_name = format("%s-mgmt-nsg-%s", local.student_id, random_id.id.hex)
+  network_security_group_name = format("%s-mgmt-nsg", local.student_id)
   depends_on                  = [module.mgmt-network-security-group]
 }
 
