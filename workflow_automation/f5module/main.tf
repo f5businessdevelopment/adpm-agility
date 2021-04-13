@@ -170,7 +170,7 @@ locals {
   total_nics  = length(concat(local.mgmt_public_subnet_id, local.mgmt_private_subnet_id, local.external_public_subnet_id, local.external_private_subnet_id, local.internal_public_subnet_id, local.internal_private_subnet_id))
   vlan_list   = concat(local.external_public_subnet_id, local.external_private_subnet_id, local.internal_public_subnet_id, local.internal_private_subnet_id)
   selfip_list = concat(azurerm_network_interface.external_nic.*.private_ip_address, azurerm_network_interface.external_public_nic.*.private_ip_address, azurerm_network_interface.internal_nic.*.private_ip_address)
-  instance_prefix = format("%s-%s", local.student_id, random_id.id.hex)
+  instance_prefix = format("%s-%s", local.student_id, random_id.module_id.hex)
   gw_bytes_nic = local.total_nics > 1 ? element(split("/",local.selfip_list[0]), 0 ): ""
 
 }
