@@ -107,7 +107,6 @@ module "network" {
   vnet_name           = format("student-%s-vnet", local.student_id)
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = [var.cidr]
-  location            = var.location
   subnet_prefixes     = [cidrsubnet(var.cidr, 8, 1)]
   subnet_names        = ["mgmt-subnet"]
   depends_on = [
